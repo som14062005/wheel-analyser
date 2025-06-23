@@ -1,18 +1,18 @@
 import React, { useState, useMemo, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import whtImage from '../assets/WHT.png';
 
 const TrainTracker = () => {
   const [searchValue, setSearchValue] = useState('');
+  const navigate = useNavigate(); // ✅ useNavigate from react-router
 
-  // ✅ Force scroll to top when user hits Back
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // ✅ Apply 100vh style at root level to ensure height remains stable
   useEffect(() => {
     document.body.style.minHeight = '100vh';
-    document.body.style.backgroundColor = 'black'; // optional fallback
+    document.body.style.backgroundColor = 'black';
     return () => {
       document.body.style.minHeight = '';
       document.body.style.backgroundColor = '';
@@ -24,7 +24,7 @@ const TrainTracker = () => {
     return Array.from({ length: totalTrains }, (_, i) => {
       const id = `CMRLTR${(i % 10) + 1}`;
       const status = i % 3 === 0 ? 'active' : i % 3 === 1 ? 'inactive' : 'normal';
-      return { id, status, page: `train${i + 1}.html` };
+      return { id, status };
     });
   }, []);
 
@@ -38,8 +38,9 @@ const TrainTracker = () => {
     setSearchValue(e.target.value);
   };
 
-  const handleTrainClick = (page) => {
-    window.location.href = page;
+  // ✅ Navigate to /axle when train is clicked
+  const handleTrainClick = () => {
+    navigate('/axle');
   };
 
   return (
@@ -63,7 +64,7 @@ const TrainTracker = () => {
         {filteredTrains.map((train, index) => (
           <div
             key={index}
-            onClick={() => handleTrainClick(train.page)}
+            onClick={handleTrainClick}
             className="bg-white rounded-2xl shadow-lg p-5 text-center transition-all duration-300 w-38 cursor-pointer border border-transparent hover:-translate-y-1 hover:border-blue-700 hover:shadow-xl"
           >
             <img

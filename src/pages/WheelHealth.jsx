@@ -1,0 +1,83 @@
+import React, { useState, useMemo } from 'react';
+import whtImage from '../assets/WHT.png';
+import bgImage from '../assets/anabg.jpeg';
+
+const TrainTracker = () => {
+  const [searchValue, setSearchValue] = useState('');
+  
+  // Generate train data
+  const trainData = useMemo(() => {
+    const totalTrains = 52;
+    return Array.from({ length: totalTrains }, (_, i) => {
+      const id = `CMRLTR${(i % 10) + 1}`;
+      const status = i % 3 === 0 ? 'active' : i % 3 === 1 ? 'inactive' : 'normal';
+      return { id, status, page: `train${i + 1}.html` };
+    });
+  }, []);
+
+  // Filter trains based on search
+  const filteredTrains = useMemo(() => {
+    return trainData.filter(train => 
+      train.id.toUpperCase().includes(searchValue.toUpperCase())
+    );
+  }, [trainData, searchValue]);
+
+  const handleSearch = (e) => {
+    setSearchValue(e.target.value);
+  };
+
+  const handleTrainClick = (page) => {
+    // In a real React app, you'd use React Router or similar
+    window.location.href = page;
+  };
+
+  return (
+    <div className="min-h-screen flex justify-center p-10 bg-cover bg-center bg-no-repeat" 
+         style={{
+           backgroundImage: "url('anabg.jpeg')",
+           fontFamily: "'Inter', sans-serif"
+         }}>
+      <div className="w-full max-w-7xl p-10 bg-white rounded-3xl shadow-2xl">
+        {/* Search Box */}
+        <div className="flex justify-center mb-10">
+          <input
+            type="text"
+            value={searchValue}
+            onChange={handleSearch}
+            placeholder="Search Train ID..."
+            className="w-3/5 px-6 py-4 border-2 border-blue-700 rounded-full text-lg text-gray-800 outline-none bg-gray-50 transition-all duration-300 focus:bg-white focus:shadow-lg focus:ring-4 focus:ring-blue-100"
+          />
+        </div>
+
+        {/* Train Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-8 p-2 justify-items-center">
+          {filteredTrains.map((train, index) => (
+            <div
+              key={index}
+              onClick={() => handleTrainClick(train.page)}
+              className="bg-white rounded-2xl shadow-lg p-5 text-center transition-all duration-300 w-38 cursor-pointer border border-transparent hover:transform hover:-translate-y-1 hover:border-blue-700 hover:shadow-xl"
+            >
+              <img
+  src={whtImage}
+  alt="Train Icon"
+  className="w-20 h-20 object-contain mb-2 mx-auto rounded-full border-2 border-gray-200"
+/>
+              <div className="mt-2 px-3 py-1 rounded-full text-sm font-semibold bg-blue-700 text-white inline-block shadow-md">
+                {train.id}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* No results message */}
+        {filteredTrains.length === 0 && (
+          <div className="text-center mt-10 text-gray-500 text-lg">
+            No trains found matching "{searchValue}"
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default TrainTracker;

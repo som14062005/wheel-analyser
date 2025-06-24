@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import trainImg from '../assets/WHT.png';
 import compartment1 from '../assets/compartment1.png';
 import compartment2 from '../assets/compartment2.png';
@@ -8,6 +8,8 @@ import compartment4 from '../assets/compartment4.png';
 
 const AxleInfo = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const trainId = location.state?.trainId || 'Unknown';
 
   return (
     <div className="min-h-screen bg-white font-sans">
@@ -19,7 +21,7 @@ const AxleInfo = () => {
           className="w-[90px] h-[90px] object-cover rounded-full border-2 border-gray-800 mr-6"
         />
         <div className="flex-1 text-xl font-bold">
-          Train ID : <span className="text-black">CMRLTR4</span>
+          Train ID : <span className="text-black">{trainId}</span>
         </div>
         <div className="text-lg font-bold text-gray-800">
           HEALTH SCORE : 88/100

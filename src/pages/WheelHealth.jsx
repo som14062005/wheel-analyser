@@ -4,7 +4,7 @@ import whtImage from '../assets/WHT.png';
 
 const TrainTracker = () => {
   const [searchValue, setSearchValue] = useState('');
-  const navigate = useNavigate(); // ✅ useNavigate from react-router
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -38,9 +38,8 @@ const TrainTracker = () => {
     setSearchValue(e.target.value);
   };
 
-  // ✅ Navigate to /axle when train is clicked
-  const handleTrainClick = () => {
-    navigate('/axle');
+  const handleTrainClick = (trainId) => {
+    navigate('/axle', { state: { trainId } });
   };
 
   return (
@@ -64,7 +63,7 @@ const TrainTracker = () => {
         {filteredTrains.map((train, index) => (
           <div
             key={index}
-            onClick={handleTrainClick}
+            onClick={() => handleTrainClick(train.id)}
             className="bg-white rounded-2xl shadow-lg p-5 text-center transition-all duration-300 w-38 cursor-pointer border border-transparent hover:-translate-y-1 hover:border-blue-700 hover:shadow-xl"
           >
             <img
